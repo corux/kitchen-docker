@@ -37,6 +37,7 @@ module Kitchen
       default_config :cap_drop,      nil
       default_config :security_opt,  nil
       default_config :use_cache,     true
+      default_config :pull,          false
       default_config :remove_images, false
       default_config :run_command,   '/usr/sbin/sshd -D -o UseDNS=no -o UsePAM=no -o PasswordAuthentication=yes ' +
                                      '-o UsePrivilegeSeparation=no -o PidFile=/tmp/sshd.pid'
@@ -269,6 +270,7 @@ module Kitchen
       def build_image(state)
         cmd = "build"
         cmd << " --no-cache" unless config[:use_cache]
+        cmd << " --pull=true" if config[:pull]
         dockerfile_contents = dockerfile
         build_context = config[:build_context] ? '.' : '-'
         file = Tempfile.new('Dockerfile-kitchen', Dir.pwd)
